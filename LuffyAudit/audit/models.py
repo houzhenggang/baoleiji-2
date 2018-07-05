@@ -13,7 +13,7 @@ class Host(models.Model):
     hostname = models.CharField(max_length=64,unique=True)
     ip_addr = models.GenericIPAddressField(unique=True)
     port = models.IntegerField(default=22)
-    idc = models.ForeignKey("IDC")
+    idc = models.ForeignKey("IDC",on_delete=True)
     #host_groups = models.ManyToManyField("HostGroup")
     #host_users = models.ManyToManyField("HostUser")
     enabled = models.BooleanField(default=True)
@@ -49,8 +49,8 @@ class HostUser(models.Model):
 
 class HostUserBind(models.Model):
     """绑定主机和用户"""
-    host = models.ForeignKey("Host")
-    host_user = models.ForeignKey("HostUser")
+    host = models.ForeignKey("Host",on_delete=True)
+    host_user = models.ForeignKey("HostUser",on_delete=True)
 
     def __str__(self):
         return "%s-%s" %(self.host,self.host_user)
@@ -70,7 +70,7 @@ class Account(models.Model):
     user.account.host_user_bind
     """
 
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User,on_delete=True)
     name = models.CharField(max_length=64)
 
     host_user_binds = models.ManyToManyField("HostUserBind",blank=True)
